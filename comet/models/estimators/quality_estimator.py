@@ -11,13 +11,13 @@ from typing import Dict, List, Tuple, Union
 import pandas as pd
 import torch
 
-from comet.models.estimators import CometEstimator, Estimator
+from comet.models.estimators import CometEstimator, Estimator, VarianceEstimator
 from comet.modules.feedforward import FeedForward
 from comet.modules.scalar_mix import ScalarMixWithDropout
 from torchnlp.utils import collate_tensors
 
 
-class QualityEstimator(CometEstimator):
+class QualityEstimator(VarianceEstimator):
     """
     Estimator class that uses a pretrained encoder to extract features from
     the sequences and then passes those features to a feed forward estimator.
@@ -55,6 +55,7 @@ class QualityEstimator(CometEstimator):
 
         self.ff = FeedForward(
             in_dim=self.encoder.output_units * 4,
+            out_dim=2,
             hidden_sizes=self.hparams.hidden_sizes,
             activations=self.hparams.activations,
             dropout=self.hparams.dropout,

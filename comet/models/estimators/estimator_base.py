@@ -73,6 +73,7 @@ class Estimator(ModelBase):
     def __init__(self, hparams: Namespace) -> None:
         super().__init__(hparams)
 
+    
     def _build_model(self) -> ModelBase:
         """
         Initializes the estimator architecture.
@@ -87,6 +88,8 @@ class Estimator(ModelBase):
             self.loss = nn.MSELoss(reduction="sum")
         elif self.hparams.loss == "binary_xent":
             self.loss = nn.BCELoss(reduction="sum")
+        elif self.hparams.loss == 'custom':
+            self.loss = VarianceLoss()
         else:
             raise Exception("{} is not a valid loss option.".format(self.hparams.loss))
 
