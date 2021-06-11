@@ -7,17 +7,18 @@ import yaml
 
 from torchnlp.download import download_file_maybe_extract
 
-from .estimators import CometEstimator, QualityEstimator
+from .estimators import  QualityEstimator, VarianceEstimator
 from .model_base import ModelBase
 from .ranking import CometRanker
 
 from subprocess import check_output #CZ: used for cache redirection
 
 str2model = {
-    "CometEstimator": CometEstimator,
+    #"CometEstimator": CometEstimator,
     "CometRanker": CometRanker,
     # Model that use source only:
     "QualityEstimator": QualityEstimator,
+    "VarianceEstimator": VarianceEstimator,
 }
 
 MODELS_URL = "https://unbabel-experimental-models.s3.amazonaws.com/comet/share/public-models.yaml"

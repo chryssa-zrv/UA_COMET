@@ -104,8 +104,8 @@ class VarianceEstimator(Estimator):
             optimizer = self._build_optimizer(layer_parameters + ff_parameters)
         scheduler = self._build_scheduler(optimizer)
 
-        var_optimizer = self._build_optimizer(layer_parameters + ff_parameters)
-        return [optimizer,var_optimizer], [scheduler]
+        #var_optimizer = self._build_optimizer(layer_parameters + ff_parameters)
+        return [optimizer], [scheduler]
 
     def prepare_sample(
         self, sample: List[Dict[str, Union[str, float]]], inference: bool = False
@@ -175,7 +175,9 @@ class VarianceEstimator(Estimator):
         src_sentemb = self.get_sentence_embedding(src_tokens, src_lengths)
         mt_sentemb = self.get_sentence_embedding(mt_tokens, mt_lengths)
         ref_sentemb = self.get_sentence_embedding(ref_tokens, ref_lengths)
-
+        #print(src_sentemb)
+        #print(mt_sentemb)
+        #print(ref_sentemb)
         diff_ref = torch.abs(mt_sentemb - ref_sentemb)
         diff_src = torch.abs(mt_sentemb - src_sentemb)
 
@@ -191,10 +193,15 @@ class VarianceEstimator(Estimator):
             embedded_sequences = torch.cat(
                 (mt_sentemb, ref_sentemb, prod_ref, diff_ref, prod_src, diff_src), dim=1
             )
+            #print(embedded_sequences)
             #CZ getting two predictions, score and variance
             scores = self.ff(embedded_sequences)
-            score = scores[0]
-            var = scores[1]
+            #print('------------------scores_1')
+            #print(scores)
+            score = scores[:,0]
+            #print(score)
+            var = scores[:,1]
+            #print(var)
             
             return {"score": score, "variance":var}
 
@@ -213,6 +220,8 @@ class VarianceEstimator(Estimator):
                 )
             #CZ getting two predictions, score and variance
             scores = self.ff(embedded_sequences)
+            print('-------scores-------')
+            print(scores)
             score = scores[0]
             var = scores[1]
             

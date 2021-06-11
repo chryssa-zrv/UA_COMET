@@ -11,7 +11,7 @@ max_epochs: 3
 gradient_clip_val: 1.0
 gpus: 1
 
-batch_size: 2
+batch_size: 4
 accumulate_grad_batches: 8
 loader_workers: 4
 
@@ -23,8 +23,8 @@ nr_frozen_epochs: 1
 keep_embeddings_frozen: True
 scheduler: constant
 
-train_path: data/wmt-metrics/scores-17-19.csv
-val_path: data/wmt-metrics/dev-19.csv
+train_path: /mnt/data-zeus1/glushkovato/comet/wmt-metrics/scores-17-19.csv
+val_path: /mnt/data-zeus1/glushkovato/comet/wmt-metrics/test19-scores.csv
 
 model: VarianceEstimator
 loss: custom
@@ -37,6 +37,8 @@ pool: avg
 
 dropout: 0.1
 activations: Tanh
-hidden_sizes: "3072,1536"
+hidden_sizes: "1536,768"
 final_activation: False
 out_dim: 2
+
+#val_check_interval: 0.01

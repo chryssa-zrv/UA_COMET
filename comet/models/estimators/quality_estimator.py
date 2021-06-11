@@ -11,7 +11,7 @@ from typing import Dict, List, Tuple, Union
 import pandas as pd
 import torch
 
-from comet.models.estimators import CometEstimator, Estimator, VarianceEstimator
+from comet.models.estimators import VarianceEstimator,  Estimator
 from comet.modules.feedforward import FeedForward
 from comet.modules.scalar_mix import ScalarMixWithDropout
 from torchnlp.utils import collate_tensors

@@ -18,7 +18,7 @@ import numpy as np
 from comet.metrics import RegressionReport
 from comet.models.model_base import ModelBase
 from comet.models.utils import average_pooling, max_pooling, move_to_cpu, move_to_cuda
-
+from comet.losses.varianceloss import VarianceLoss
 import statistics
 
 class Estimator(ModelBase):
@@ -106,6 +106,7 @@ class Estimator(ModelBase):
         df["mt"] = df["mt"].astype(str)
         df["ref"] = df["ref"].astype(str)
         df["score"] = df["score"].astype(float)
+        
         return df.to_dict("records")
 
     def compute_loss(
@@ -118,7 +119,10 @@ class Estimator(ModelBase):
             a tensor [batch_size x 1] with model predictions
         :param targets: Target score values [batch_size]
         """
-        return self.loss(model_out["score"].view(-1), targets["score"])
+        
+        loss_u = self.loss(model_out["score"].view(-1),model_out["variance"].view(-1) , targets["score"])
+        #print(loss_u)
+        return self.loss(model_out["score"].view(-1),model_out["variance"].view(-1) , targets["score"])
 
     def compute_metrics(self, outputs: List[Dict[str, torch.Tensor]]) -> dict:
         """
